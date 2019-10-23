@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Places API sample</string>
+    <string name="provide_location_permission">Please, provide the location permission in order to use this app</string>
+    <string name="request_permission">Request permission</string>
 </resources>
