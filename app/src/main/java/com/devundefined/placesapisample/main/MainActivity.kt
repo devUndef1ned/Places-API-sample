@@ -1,15 +1,17 @@
-package com.devundefined.placesapisample
+package com.devundefined.placesapisample.main
 
 import android.Manifest
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.devundefined.placesapisample.R
+import moxy.MvpAppCompatActivity
+import moxy.presenter.InjectPresenter
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : MvpAppCompatActivity(), MainView, PermissionsHandler {
 
     private val contentContainer: View
         get() = findViewById(R.id.content_container)
@@ -17,6 +19,9 @@ class MainActivity : AppCompatActivity() {
         get() = findViewById(R.id.permission_error_container)
     private val requestPermissionButton: Button
         get() = findViewById(R.id.request_permission)
+
+    @InjectPresenter
+    lateinit var presenter: MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,27 +31,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        checkLocationPermission()
+        presenter.setPermissionHandler(this)
     }
 
-    private fun checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                LOCATION_PERMISSION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestLocationPermission()
-        } else {
-            showContent()
-        }
-    }
-
-    private fun requestLocationPermission() {
+    override fun requestLocationPermission() {
         ActivityCompat.requestPermissions(
             this,
             arrayOf(LOCATION_PERMISSION),
             PERMISSION_REQUEST_ID
         )
+    }
+
+    override fun hasLocationPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            LOCATION_PERMISSION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onRequestPermissionsResult(
@@ -55,23 +55,17 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         when (requestCode) {
-            PERMISSION_REQUEST_ID -> handleLocationPermissionResults(grantResults[0])
+            PERMISSION_REQUEST_ID ->
+                presenter.handlePermissionsResult(grantResults[0] == PackageManager.PERMISSION_GRANTED)
         }
     }
 
-    private fun handleLocationPermissionResults(result: Int) {
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            showContent()
-        } else {
-            showPermissionError()
-        }
-    }
-
-    fun showPermissionError() {
+    override fun showPermissionError() {
         permissionErrorContainer.visibility = View.VISIBLE
         contentContainer.visibility = View.GONE
     }
-    fun showContent() {
+
+    override fun showContent() {
         permissionErrorContainer.visibility = View.GONE
         contentContainer.visibility = View.VISIBLE
     }
@@ -81,5 +75,4 @@ class MainActivity : AppCompatActivity() {
         private const val LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION
         private const val PERMISSION_REQUEST_ID = 1
     }
-
 }
