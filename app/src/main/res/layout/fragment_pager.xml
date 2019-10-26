@@ -23,4 +23,35 @@
 
     </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/error_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/error_last_location"
+                android:gravity="center"
+                android:padding="24dp"/>
+
+            <Button
+                android:id="@+id/request_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_gravity="center"
+                android:text="@string/request_location"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
 </FrameLayout>

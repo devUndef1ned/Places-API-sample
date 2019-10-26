@@ -2,4 +2,6 @@
     <string name="app_name">Places API sample</string>
     <string name="provide_location_permission">Please, provide the location permission in order to use this app</string>
     <string name="request_permission">Request permission</string>
+    <string name="error_last_location">Failed to get last known location.\nPlease, check your settings and try again.</string>
+    <string name="request_location">Request location</string>
 </resources>

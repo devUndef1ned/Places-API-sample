@@ -9,4 +9,5 @@ import moxy.viewstate.strategy.StateStrategyType
 interface PagerView : MvpView {
     fun showLoading()
     fun showUserLocationFragment(userLocation: UserLocation)
+    fun showError(e: Throwable)
 }
