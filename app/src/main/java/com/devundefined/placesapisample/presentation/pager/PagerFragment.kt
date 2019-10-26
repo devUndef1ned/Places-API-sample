@@ -3,10 +3,12 @@ package com.devundefined.placesapisample.presentation.pager
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import com.devundefined.placesapisample.PagesApiApplication
 import com.devundefined.placesapisample.R
 import com.devundefined.placesapisample.domain.UserLocation
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 
 class PagerFragment : MvpAppCompatFragment(R.layout.fragment_pager), PagerView {
 
@@ -21,6 +23,9 @@ class PagerFragment : MvpAppCompatFragment(R.layout.fragment_pager), PagerView {
         get() = view!!.findViewById(R.id.error_container)
     private val requestLocation: View
         get() = view!!.findViewById(R.id.request_location)
+
+    @ProvidePresenter
+    fun providePresenter() = PagesApiApplication.INSTANCE.appComponent.pagerPresenter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,6 +45,7 @@ class PagerFragment : MvpAppCompatFragment(R.layout.fragment_pager), PagerView {
     }
 
     override fun showError(e: Throwable) {
+        android.util.Log.e("PagerFragment", e.message, e)
         loader.visibility = View.GONE
         contentContainer.visibility = View.GONE
         errorContainer.visibility = View.VISIBLE
