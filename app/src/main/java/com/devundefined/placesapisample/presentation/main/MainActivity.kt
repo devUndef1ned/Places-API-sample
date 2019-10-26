@@ -8,7 +8,7 @@ import android.widget.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.devundefined.placesapisample.R
-import com.devundefined.placesapisample.presentation.pager.PagerFragment
+import com.devundefined.placesapisample.presentation.content.ContentFragment
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 
@@ -73,9 +73,9 @@ class MainActivity : MvpAppCompatActivity(), MainView, PermissionsHandler {
     }
 
     private fun checkFragmentAndAddIfThereIsNotAny() {
-        val fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as PagerFragment?
+        val fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as ContentFragment?
         if (fragment == null) {
-            supportFragmentManager.beginTransaction().add(contentContainer.id, PagerFragment(), FRAGMENT_TAG).commit()
+            supportFragmentManager.beginTransaction().add(contentContainer.id, ContentFragment(), FRAGMENT_TAG).commit()
         }
     }
 

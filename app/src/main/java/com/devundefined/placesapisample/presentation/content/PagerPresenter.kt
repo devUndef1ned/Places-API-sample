@@ -1,10 +1,10 @@
-package com.devundefined.placesapisample.presentation.pager
+package com.devundefined.placesapisample.presentation.content
 
 import moxy.InjectViewState
 import moxy.MvpPresenter
 
 @InjectViewState
-class PagerPresenter(private val locationRequester: LocationRequester) : MvpPresenter<PagerView>() {
+class PagerPresenter(private val locationRequester: LocationRequester) : MvpPresenter<ContentView>() {
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -15,7 +15,7 @@ class PagerPresenter(private val locationRequester: LocationRequester) : MvpPres
         viewState.showLoading()
         // Async request of location
         locationRequester.getLastLocation({ userLocation ->
-            viewState.showUserLocationFragment(userLocation)
+            viewState.showUserLocation(userLocation)
         }, { e ->
             viewState.showError(e)
         })

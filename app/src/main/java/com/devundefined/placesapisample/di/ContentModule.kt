@@ -1,15 +1,15 @@
 package com.devundefined.placesapisample.di
 
 import android.content.Context
-import com.devundefined.placesapisample.presentation.pager.AndroidLocationRequester
-import com.devundefined.placesapisample.presentation.pager.LocationRequester
-import com.devundefined.placesapisample.presentation.pager.PagerPresenter
+import com.devundefined.placesapisample.presentation.content.AndroidLocationRequester
+import com.devundefined.placesapisample.presentation.content.LocationRequester
+import com.devundefined.placesapisample.presentation.content.PagerPresenter
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class PagerModule {
+class ContentModule {
 
     @Provides
     @Singleton

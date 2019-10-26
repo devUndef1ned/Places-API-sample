@@ -1,16 +1,16 @@
-package com.devundefined.placesapisample.presentation.pager
+package com.devundefined.placesapisample.presentation.content
 
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
-import com.devundefined.placesapisample.PagesApiApplication
+import com.devundefined.placesapisample.PlacesApiApplication
 import com.devundefined.placesapisample.R
-import com.devundefined.placesapisample.domain.UserLocation
+import com.devundefined.placesapisample.domain.Location
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
-class PagerFragment : MvpAppCompatFragment(R.layout.fragment_pager), PagerView {
+class ContentFragment : MvpAppCompatFragment(R.layout.fragment_pager), ContentView {
 
     @InjectPresenter
     lateinit var presenter: PagerPresenter
@@ -25,7 +25,7 @@ class PagerFragment : MvpAppCompatFragment(R.layout.fragment_pager), PagerView {
         get() = view!!.findViewById(R.id.request_location)
 
     @ProvidePresenter
-    fun providePresenter() = PagesApiApplication.INSTANCE.appComponent.pagerPresenter()
+    fun providePresenter() = PlacesApiApplication.INSTANCE.appComponent.pagerPresenter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,14 +38,14 @@ class PagerFragment : MvpAppCompatFragment(R.layout.fragment_pager), PagerView {
         errorContainer.visibility = View.GONE
     }
 
-    override fun showUserLocationFragment(userLocation: UserLocation) {
+    override fun showUserLocation(userLocation: Location) {
         loader.visibility = View.GONE
         contentContainer.visibility = View.VISIBLE
         errorContainer.visibility = View.GONE
     }
 
     override fun showError(e: Throwable) {
-        android.util.Log.e("PagerFragment", e.message, e)
+        android.util.Log.e("ContentFragment", e.message, e)
         loader.visibility = View.GONE
         contentContainer.visibility = View.GONE
         errorContainer.visibility = View.VISIBLE

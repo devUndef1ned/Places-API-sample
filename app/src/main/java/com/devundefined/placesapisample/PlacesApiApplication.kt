@@ -5,10 +5,10 @@ import com.devundefined.placesapisample.di.AppComponent
 import com.devundefined.placesapisample.di.AppModule
 import com.devundefined.placesapisample.di.DaggerAppComponent
 
-class PagesApiApplication : Application() {
+class PlacesApiApplication : Application() {
 
     companion object {
-        lateinit var INSTANCE: PagesApiApplication
+        lateinit var INSTANCE: PlacesApiApplication
             private set
     }
 
