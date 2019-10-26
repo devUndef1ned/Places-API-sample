@@ -1,4 +1,4 @@
-package com.devundefined.placesapisample.main
+package com.devundefined.placesapisample.presentation.main
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -8,6 +8,7 @@ import android.widget.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.devundefined.placesapisample.R
+import com.devundefined.placesapisample.presentation.pager.PagerFragment
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 
@@ -68,11 +69,20 @@ class MainActivity : MvpAppCompatActivity(), MainView, PermissionsHandler {
     override fun showContent() {
         permissionErrorContainer.visibility = View.GONE
         contentContainer.visibility = View.VISIBLE
+        checkFragmentAndAddIfThereIsNotAny()
+    }
+
+    private fun checkFragmentAndAddIfThereIsNotAny() {
+        val fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as PagerFragment?
+        if (fragment == null) {
+            supportFragmentManager.beginTransaction().add(contentContainer.id, PagerFragment(), FRAGMENT_TAG).commit()
+        }
     }
 
 
     companion object {
         private const val LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION
         private const val PERMISSION_REQUEST_ID = 1
+        private const val FRAGMENT_TAG = "fragment_tag"
     }
 }

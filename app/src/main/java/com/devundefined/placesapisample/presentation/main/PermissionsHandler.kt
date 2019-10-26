@@ -1,4 +1,4 @@
-package com.devundefined.placesapisample.main
+package com.devundefined.placesapisample.presentation.main
 
 interface PermissionsHandler {
     fun requestLocationPermission()
