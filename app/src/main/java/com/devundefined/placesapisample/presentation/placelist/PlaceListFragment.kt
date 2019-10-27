@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
+import com.devundefined.placesapisample.PlacesApiApplication
 import com.devundefined.placesapisample.R
 import com.devundefined.placesapisample.domain.Location
+import com.devundefined.placesapisample.domain.Place
 import com.devundefined.placesapisample.switchVisibility
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -28,7 +30,10 @@ class PlaceListFragment : MvpAppCompatFragment(R.layout.fragment_place_list), Pl
         get() = view!!.findViewById(R.id.reload_places)
 
     @ProvidePresenter
-    fun providePresenter() = PlaceListPresenter(arguments!!.getSerializable(KEY_ARG_USER_LOCATION) as Location)
+    fun providePresenter() = PlaceListPresenter(
+        arguments!!.getSerializable(KEY_ARG_USER_LOCATION) as Location,
+        PlacesApiApplication.INSTANCE.appComponent.placesLoadService()
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,7 +52,7 @@ class PlaceListFragment : MvpAppCompatFragment(R.layout.fragment_place_list), Pl
         errorContainer.switchVisibility(true)
     }
 
-    override fun showPlaceList(placeList: List<PlaceViewObject>) {
+    override fun showPlaceList(placeList: List<Place>) {
         loader.switchVisibility(false)
         contentContainer.switchVisibility(true)
         errorContainer.switchVisibility(false)

@@ -24,10 +24,16 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'ApiSecretKey', ApiSecretKey
+    }
 }
 
 def moxyVersion = "2.0.2"
 def daggerVersion = "2.25.2"
+def stethoVersion = "1.5.1"
+def retrofitVersion = "2.6.2"
+def coroutinesVersion = "1.3.1"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -44,6 +50,15 @@ dependencies {
     // Dagger2
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    // Stetho
+    implementation "com.facebook.stetho:stetho:$stethoVersion"
+    implementation "com.facebook.stetho:stetho-okhttp3:$stethoVersion"
+    // Retrofit2
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     testImplementation 'junit:junit:4.12'
 

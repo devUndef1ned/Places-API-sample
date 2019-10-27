@@ -1,20 +1,15 @@
 package com.devundefined.placesapisample.domain
 
-import kotlin.math.pow
-import kotlin.math.sqrt
-
 data class Place(
     val name: String,
     val category: PlaceCategory,
-    val rating: Int,
+    val rating: Float,
     val address: String,
-    val location: Location
-) {
-    fun getDistance(from: Location): Double {
-        return sqrt(
-            (from.latitude - location.latitude).pow(2) + (from.longitude - location.longitude).pow(
-                2
-            )
-        )
-    }
+    val location: Location,
+    val distance: Double,
+    val isOpenNow: OpenNow
+)
+
+enum class OpenNow {
+    OPEN, CLOSED, UNKNOWN
 }

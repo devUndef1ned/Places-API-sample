@@ -4,6 +4,7 @@ import android.app.Application
 import com.devundefined.placesapisample.di.AppComponent
 import com.devundefined.placesapisample.di.AppModule
 import com.devundefined.placesapisample.di.DaggerAppComponent
+import com.facebook.stetho.Stetho
 
 class PlacesApiApplication : Application() {
 
@@ -22,5 +23,6 @@ class PlacesApiApplication : Application() {
         super.onCreate()
         INSTANCE = this
         appComponent
+        Stetho.initializeWithDefaults(this)
     }
 }

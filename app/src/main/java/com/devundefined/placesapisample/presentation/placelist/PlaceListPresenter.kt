@@ -1,11 +1,19 @@
 package com.devundefined.placesapisample.presentation.placelist
 
 import com.devundefined.placesapisample.domain.Location
+import com.devundefined.placesapisample.domain.PlacesLoadService
+import kotlinx.coroutines.*
 import moxy.InjectViewState
 import moxy.MvpPresenter
 
 @InjectViewState
-class PlaceListPresenter(private val userLocation: Location) : MvpPresenter<PlaceListView>() {
+class PlaceListPresenter(
+    private val userLocation: Location,
+    private val placesLoadService: PlacesLoadService
+) : MvpPresenter<PlaceListView>() {
+
+    private val bgScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    private val uiScope = CoroutineScope(Dispatchers.Main)
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -18,6 +26,19 @@ class PlaceListPresenter(private val userLocation: Location) : MvpPresenter<Plac
 
     private fun requestPlacesByUserLocation(userLocation: Location) {
         viewState.showLoading()
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        runBlocking {
+            bgScope.launch {
+                try {
+                    val places = placesLoadService.loadByLocation(userLocation)
+                    uiScope.launch {
+                        viewState.showPlaceList(places)
+                    }
+                } catch (e: Exception) {
+                    uiScope.launch {
+                        viewState.showError(e)
+                    }
+                }
+            }
+        }
     }
 }
