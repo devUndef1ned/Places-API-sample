@@ -6,11 +6,12 @@ import android.widget.ProgressBar
 import com.devundefined.placesapisample.PlacesApiApplication
 import com.devundefined.placesapisample.R
 import com.devundefined.placesapisample.domain.Location
+import com.devundefined.placesapisample.presentation.placelist.PlaceListFragment
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
-class ContentFragment : MvpAppCompatFragment(R.layout.fragment_pager), ContentView {
+class ContentFragment : MvpAppCompatFragment(R.layout.fragment_content), ContentView {
 
     @InjectPresenter
     lateinit var presenter: PagerPresenter
@@ -42,12 +43,23 @@ class ContentFragment : MvpAppCompatFragment(R.layout.fragment_pager), ContentVi
         loader.visibility = View.GONE
         contentContainer.visibility = View.VISIBLE
         errorContainer.visibility = View.GONE
+        val fragment = childFragmentManager.findFragmentByTag(TAG_PLACE_LIST_FRAGMENT)
+        if (fragment == null) {
+            val placesFragment = PlaceListFragment.newInstance(userLocation)
+            childFragmentManager.beginTransaction()
+                .add(R.id.content_container, placesFragment, TAG_PLACE_LIST_FRAGMENT)
+                .commit()
+        }
     }
 
     override fun showError(e: Throwable) {
-        android.util.Log.e("ContentFragment", e.message, e)
+        android.util.Log.w("ContentFragment", e.message, e)
         loader.visibility = View.GONE
         contentContainer.visibility = View.GONE
         errorContainer.visibility = View.VISIBLE
+    }
+
+    companion object {
+        private const val TAG_PLACE_LIST_FRAGMENT = "tag_place_list_fragment"
     }
 }

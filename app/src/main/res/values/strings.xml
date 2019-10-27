@@ -4,4 +4,6 @@
     <string name="request_permission">Request permission</string>
     <string name="error_last_location">Failed to get last known location.\nPlease, check your settings and try again.</string>
     <string name="request_location">Request location</string>
+    <string name="error_place_loading">Failed to load nearby places.\nPlease, check your connection and try again.</string>
+    <string name="reload_places">Request location</string>
 </resources>
