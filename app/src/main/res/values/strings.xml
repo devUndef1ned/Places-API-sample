@@ -6,4 +6,6 @@
     <string name="request_location">Request location</string>
     <string name="error_place_loading">Failed to load nearby places.\nPlease, check your connection and try again.</string>
     <string name="reload_places">Request location</string>
+    <string name="distance_km">%1$.2f km</string>
+    <string name="distance_m">%1$d m</string>
 </resources>

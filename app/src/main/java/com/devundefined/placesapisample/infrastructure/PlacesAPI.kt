@@ -14,5 +14,5 @@ interface PlacesAPI {
     ): PlacesResponseDto
 
     @GET("maps/api/place/nearbysearch/json")
-    suspend fun getPlacesByToken(@Query("pagetoken") pageToken: String, @Query("key") apiKey: String): PlacesResponseDto
+    suspend fun getPlacesByToken(@Query("pagetoken") pageToken: String, @Query("key") apiKey: String, @Query("request_count") requestCount: Int): PlacesResponseDto
 }

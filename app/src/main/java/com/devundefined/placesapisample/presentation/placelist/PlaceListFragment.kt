@@ -3,11 +3,13 @@ package com.devundefined.placesapisample.presentation.placelist
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devundefined.placesapisample.PlacesApiApplication
 import com.devundefined.placesapisample.R
 import com.devundefined.placesapisample.domain.Location
 import com.devundefined.placesapisample.domain.Place
+import com.devundefined.placesapisample.presentation.placelist.adapter.PlacesAdapter
 import com.devundefined.placesapisample.switchVisibility
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -38,6 +40,7 @@ class PlaceListFragment : MvpAppCompatFragment(R.layout.fragment_place_list), Pl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requestLocation.setOnClickListener { presenter.requestPlaces() }
+        recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
     override fun showLoading() {
@@ -47,19 +50,23 @@ class PlaceListFragment : MvpAppCompatFragment(R.layout.fragment_place_list), Pl
     }
 
     override fun showError(e: Throwable) {
+        android.util.Log.e(LOG_TAG, "Failed to fetch places list", e)
         loader.switchVisibility(false)
         contentContainer.switchVisibility(false)
         errorContainer.switchVisibility(true)
     }
 
     override fun showPlaceList(placeList: List<Place>) {
+        android.util.Log.w(LOG_TAG, "Showing list with size ${placeList.size}")
         loader.switchVisibility(false)
         contentContainer.switchVisibility(true)
         errorContainer.switchVisibility(false)
+        recyclerView.adapter = PlacesAdapter(placeList)
     }
 
     companion object {
         private const val KEY_ARG_USER_LOCATION = "key_arg_user_location"
+        private const val LOG_TAG = "PlaceListFragment"
         fun newInstance(userLocation: Location) = PlaceListFragment().apply {
             arguments = Bundle().apply {
                 putSerializable(KEY_ARG_USER_LOCATION, userLocation)
