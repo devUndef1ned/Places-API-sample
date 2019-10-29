@@ -1,6 +1,7 @@
 package com.devundefined.placesapisample.presentation.placelist
 
 import com.devundefined.placesapisample.domain.Location
+import com.devundefined.placesapisample.domain.PlaceCategory
 import com.devundefined.placesapisample.domain.PlacesLoadService
 import kotlinx.coroutines.*
 import moxy.InjectViewState
@@ -9,6 +10,7 @@ import moxy.MvpPresenter
 @InjectViewState
 class PlaceListPresenter(
     private val userLocation: Location,
+    private val placeCategory: PlaceCategory,
     private val placesLoadService: PlacesLoadService
 ) : MvpPresenter<PlaceListView>() {
 
@@ -29,7 +31,8 @@ class PlaceListPresenter(
         runBlocking {
             bgScope.launch {
                 try {
-                    val places = placesLoadService.loadByLocation(userLocation)
+                    val places =
+                        placesLoadService.loadByLocationAndCategory(userLocation, placeCategory)
                     uiScope.launch {
                         viewState.showPlaceList(places)
                     }

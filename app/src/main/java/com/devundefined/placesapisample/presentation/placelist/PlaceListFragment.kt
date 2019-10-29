@@ -3,12 +3,14 @@ package com.devundefined.placesapisample.presentation.placelist
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devundefined.placesapisample.PlacesApiApplication
 import com.devundefined.placesapisample.R
 import com.devundefined.placesapisample.domain.Location
 import com.devundefined.placesapisample.domain.Place
+import com.devundefined.placesapisample.domain.PlaceCategory
 import com.devundefined.placesapisample.presentation.placelist.adapter.PlacesAdapter
 import com.devundefined.placesapisample.switchVisibility
 import moxy.MvpAppCompatFragment
@@ -34,13 +36,16 @@ class PlaceListFragment : MvpAppCompatFragment(R.layout.fragment_place_list), Pl
     @ProvidePresenter
     fun providePresenter() = PlaceListPresenter(
         arguments!!.getSerializable(KEY_ARG_USER_LOCATION) as Location,
+        PlaceCategory.values()[arguments!!.getInt(KEY_ARG_CATEGORY_ORDINAL)],
         PlacesApiApplication.INSTANCE.appComponent.placesLoadService()
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requestLocation.setOnClickListener { presenter.requestPlaces() }
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), layoutManager.orientation))
+        recyclerView.layoutManager = layoutManager
     }
 
     override fun showLoading() {
@@ -57,7 +62,6 @@ class PlaceListFragment : MvpAppCompatFragment(R.layout.fragment_place_list), Pl
     }
 
     override fun showPlaceList(placeList: List<Place>) {
-        android.util.Log.w(LOG_TAG, "Showing list with size ${placeList.size}")
         loader.switchVisibility(false)
         contentContainer.switchVisibility(true)
         errorContainer.switchVisibility(false)
@@ -66,10 +70,12 @@ class PlaceListFragment : MvpAppCompatFragment(R.layout.fragment_place_list), Pl
 
     companion object {
         private const val KEY_ARG_USER_LOCATION = "key_arg_user_location"
+        private const val KEY_ARG_CATEGORY_ORDINAL = "key_arg_category_ordinal"
         private const val LOG_TAG = "PlaceListFragment"
-        fun newInstance(userLocation: Location) = PlaceListFragment().apply {
+        fun newInstance(userLocation: Location, placeCategory: PlaceCategory) = PlaceListFragment().apply {
             arguments = Bundle().apply {
                 putSerializable(KEY_ARG_USER_LOCATION, userLocation)
+                putInt(KEY_ARG_CATEGORY_ORDINAL, placeCategory.ordinal)
             }
         }
     }

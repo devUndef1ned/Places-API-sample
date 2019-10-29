@@ -27,6 +27,7 @@ class MainActivity : MvpAppCompatActivity(), MainView, PermissionsHandler {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar?.elevation = 0f
         requestPermissionButton.setOnClickListener { requestLocationPermission() }
     }
 

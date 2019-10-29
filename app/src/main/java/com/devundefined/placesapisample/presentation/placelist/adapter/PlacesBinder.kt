@@ -8,9 +8,9 @@ object PlacesBinder {
     fun bindData(placesVH: PlacesVH, place: Place) {
         placesVH.setTitle(place.name)
         placesVH.setAddress(place.address)
-        placesVH.setCategory(place.category.value.capitalize())
         placesVH.setRating(place.rating)
         placesVH.showOpenNow(place.isOpenNow != OpenNow.UNKNOWN)
+        placesVH.setOpenNowColor(if (place.isOpenNow == OpenNow.OPEN) R.color.colorGreen else R.color.colorRed)
         placesVH.setOpenNowText(place.isOpenNow.name)
         placesVH.setDistance(getDistanceString(placesVH, place))
     }

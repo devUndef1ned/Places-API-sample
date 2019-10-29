@@ -26,20 +26,12 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center_vertical|right"
             android:textColor="@color/colorRed"
             android:textSize="18sp"
             tools:text="CLOSED" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        tools:text="Restaurant" />
 
 
     <LinearLayout
@@ -71,10 +63,13 @@
 
     <RatingBar
         android:id="@+id/rating"
+        style="@style/Widget.AppCompat.RatingBar.Indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:clickable="false"
-        tools:rating="3.2"/>
+        android:isIndicator="true"
+        android:stepSize="0.01"
+        tools:rating="3.73" />
 
 </LinearLayout>

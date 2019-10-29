@@ -43,23 +43,24 @@ class PlaceLoaderImpl(
                 val data = mutableListOf<PlaceDto>()
                 val locationQueryString = "${userLocation.latitude},${userLocation.longitude}"
                 val radius = 5000
-                var portion: PlacesResponseDto? =
-                    placesAPI.getPlacesByParms(apiKey, locationQueryString, radius, category.value)
-                var token = portion?.nextPageToken
+                var portion = placesAPI.getPlacesByParms(apiKey, locationQueryString, radius, category.value)
+                var token = portion.nextPageToken
                 while (token != null) {
-                    data.addAll(portion!!.places)
-                    portion = loadByToken(token)
-                    token = portion?.nextPageToken
+                    data.addAll(portion.places)
+                    portion = try {
+                        loadByToken(token)
+                    } catch (e: Exception) {
+                        break
+                    }
+                    token = portion.nextPageToken
                 }
                 data.map { dto -> dto.toModel(userLocation, category) }
             }
         }
     }
 
-    private suspend fun loadByToken(token: String, attempt: Int = 0): PlacesResponseDto? {
-        if (attempt >= MAX_ATTEMPT_COUNT) {
-            return null
-        }
+    private suspend fun loadByToken(token: String, attempt: Int = 0): PlacesResponseDto {
+        require (attempt < MAX_ATTEMPT_COUNT)
         return try {
             val candidate = placesAPI.getPlacesByToken(token, apiKey, attempt)
             if (candidate.isSuccess()) {
@@ -75,6 +76,6 @@ class PlaceLoaderImpl(
 
     companion object {
         private const val MAX_ATTEMPT_COUNT = 3
-        private const val RETRY_SLEEP_TIME = 500L
+        private const val RETRY_SLEEP_TIME = 1000L
     }
 }

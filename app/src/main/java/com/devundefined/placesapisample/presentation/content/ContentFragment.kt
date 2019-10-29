@@ -3,10 +3,11 @@ package com.devundefined.placesapisample.presentation.content
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import androidx.viewpager.widget.ViewPager
 import com.devundefined.placesapisample.PlacesApiApplication
 import com.devundefined.placesapisample.R
 import com.devundefined.placesapisample.domain.Location
-import com.devundefined.placesapisample.presentation.placelist.PlaceListFragment
+import com.google.android.material.tabs.TabLayout
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
@@ -24,6 +25,10 @@ class ContentFragment : MvpAppCompatFragment(R.layout.fragment_content), Content
         get() = view!!.findViewById(R.id.error_container)
     private val requestLocation: View
         get() = view!!.findViewById(R.id.request_location)
+    private val tabLayout: TabLayout
+        get() = view!!.findViewById(R.id.tabs)
+    private val viewPager: ViewPager
+        get() = view!!.findViewById(R.id.view_pager)
 
     @ProvidePresenter
     fun providePresenter() = PlacesApiApplication.INSTANCE.appComponent.pagerPresenter()
@@ -31,6 +36,7 @@ class ContentFragment : MvpAppCompatFragment(R.layout.fragment_content), Content
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requestLocation.setOnClickListener { presenter.requestUserLocation() }
+        tabLayout.setupWithViewPager(viewPager)
     }
 
     override fun showLoading() {
@@ -40,16 +46,10 @@ class ContentFragment : MvpAppCompatFragment(R.layout.fragment_content), Content
     }
 
     override fun showUserLocation(userLocation: Location) {
+        viewPager.adapter = CategoryPageAdapter(childFragmentManager, userLocation)
         loader.visibility = View.GONE
         contentContainer.visibility = View.VISIBLE
         errorContainer.visibility = View.GONE
-        val fragment = childFragmentManager.findFragmentByTag(TAG_PLACE_LIST_FRAGMENT)
-        if (fragment == null) {
-            val placesFragment = PlaceListFragment.newInstance(userLocation)
-            childFragmentManager.beginTransaction()
-                .add(R.id.content_container, placesFragment, TAG_PLACE_LIST_FRAGMENT)
-                .commit()
-        }
     }
 
     override fun showError(e: Throwable) {
@@ -57,9 +57,5 @@ class ContentFragment : MvpAppCompatFragment(R.layout.fragment_content), Content
         loader.visibility = View.GONE
         contentContainer.visibility = View.GONE
         errorContainer.visibility = View.VISIBLE
-    }
-
-    companion object {
-        private const val TAG_PLACE_LIST_FRAGMENT = "tag_place_list_fragment"
     }
 }
