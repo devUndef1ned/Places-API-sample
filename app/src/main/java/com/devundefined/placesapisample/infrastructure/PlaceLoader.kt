@@ -42,16 +42,16 @@ class PlaceLoaderImpl(
             withContext(scope.coroutineContext) {
                 val data = mutableListOf<PlaceDto>()
                 val locationQueryString = "${userLocation.latitude},${userLocation.longitude}"
-                val radius = 5000
-                var portion = placesAPI.getPlacesByParms(apiKey, locationQueryString, radius, category.value)
+                var portion = placesAPI.getPlacesByParms(apiKey, locationQueryString, RADIUS_METERS, category.value)
+                data.addAll(portion.places)
                 var token = portion.nextPageToken
                 while (token != null) {
-                    data.addAll(portion.places)
                     portion = try {
                         loadByToken(token)
                     } catch (e: Exception) {
                         break
                     }
+                    data.addAll(portion.places)
                     token = portion.nextPageToken
                 }
                 data.map { dto -> dto.toModel(userLocation, category) }
@@ -75,6 +75,7 @@ class PlaceLoaderImpl(
     }
 
     companion object {
+        private const val RADIUS_METERS = 5000
         private const val MAX_ATTEMPT_COUNT = 3
         private const val RETRY_SLEEP_TIME = 1000L
     }
